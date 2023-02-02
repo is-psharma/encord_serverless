@@ -1,0 +1,36 @@
+service: prasun-encord-dev
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: 
+            - 'secretsmanager:GetRandomPassword'
+            - 'secretsmanager:GetResourcePolicy'
+            - 'secretsmanager:GetSecretValue'
+            - 'secretsmanager:DescribeSecret'
+            - 'lambda:GetAccountSettings'
+            - 'lambda:CreateEventSourceMapping'
+            - 'lambda:CreateCodeSigningConfig'
+            - 'secretsmanager:ListSecretVersionIds'
+            - 'secretsmanager:ListSecrets'
+          Resource:
+            - 'arn:aws:secretsmanager:us-east-1:691195436300:secret:prasunSSHKey-EoocHs'
+
+functions:
+  lambda_handler:
+    handler: handler.lambda_handler
+    timeout: 300
+
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
